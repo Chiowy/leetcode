@@ -9,12 +9,30 @@
 from typing import List # 解决NameError: name 'List' is not defined
 
 class Solution:
-    def surfaceArea(self, grid: List[List[int]]) -> int:
+    def surfaceArea(self, grid: List[List[int]]) -> int:   
+        
         area = 0
-        for i in range(len(grid) - 1):
-            for j in range(len(grid) - 1): #遍历矩阵
-                if i == 0 or i == (len(grid) - 1):#第一行和最后一行的格子
-                    if j == 0 or j == (len(grid) - 1):#四个角
-                        area = area + grid[i][j] * 2
+        # padding
+        for row in grid:
+            row.insert(0, 0)
+            row.append(0)
+        grid.insert(0, [0] * (len(grid) + 2))
+        grid.append([0] * (len(grid) + 2))
 
-Solution().surfaceArea([[1, 2], [3, 4]])
+        for i in range(1, len(grid) - 1):
+            for j in range(1, len(grid) - 1):
+                # 考虑0的情况
+                center = grid[i][j]
+                if center != 0:
+                    area += 2
+                    mylist = [grid[i + 1][j], grid[i - 1][j], grid[i][j - 1], grid[i][j + 1]] 
+                    for x in mylist:
+                        if center > x: area += center - x 
+                    
+        return area
+print(Solution().surfaceArea([[1,2],[3,4]]))
+
+"""RESULT
+Runtime: 177 ms, faster than 18.98% of Python3 online submissions for Surface Area of 3D Shapes.
+Memory Usage: 14 MB, less than 25.93% of Python3 online submissions for Surface Area of 3D Shapes.
+"""
